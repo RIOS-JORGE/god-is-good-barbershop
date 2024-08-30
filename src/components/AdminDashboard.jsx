@@ -29,8 +29,9 @@ export default function AdminDashboard() {
       <Heading size="md">Panel de Administración</Heading>
       {appointments.map((appointment) => (
         <VStack key={appointment.id} p={4} borderWidth={1} borderRadius="md" align="stretch">
-          <Text>Usuario: {appointment.userId}</Text>
-          <Text>Fecha: {new Date(appointment.date).toLocaleString()}</Text>
+          <Text>Usuario ID: {appointment.userId}</Text>
+          <Text>Nombre: {appointment.name}</Text>
+          <Text>Fecha: {new Date(appointment.date.seconds * 1000).toLocaleString()}</Text>
           <Text>Servicio: {appointment.service}</Text>
           <Select 
             value={appointment.status} 

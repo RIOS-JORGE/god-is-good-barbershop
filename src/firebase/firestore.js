@@ -1,12 +1,13 @@
 import { db } from '../firebase';
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
 
-export const addAppointment = async (userId, date, service) => {
+export const addAppointment = async (userId, date, service , name) => {
   try {
     const docRef = await addDoc(collection(db, "appointments"), {
       userId,
       date,
       service,
+      name,
       status: 'pending'
     });
     return docRef.id;
@@ -18,6 +19,7 @@ export const addAppointment = async (userId, date, service) => {
 export const getUserAppointments = async (userId) => {
   const q = query(collection(db, "appointments"), where("userId", "==", userId));
   const querySnapshot = await getDocs(q);
+  console.log(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 

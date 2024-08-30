@@ -27,7 +27,7 @@ export default function UserAppointments() {
       <Heading size="md">Mis turnos</Heading>
       {appointments.map((appointment) => (
         <VStack key={appointment.id} p={4} borderWidth={1} borderRadius="md" align="stretch">
-          <Text>Fecha: {new Date(appointment.date).toLocaleString()}</Text>
+          <Text>Fecha: {new Date(appointment.date.seconds * 1000).toLocaleString()}</Text>
           <Text>Servicio: {appointment.service}</Text>
           <Text>Estado: {appointment.status}</Text>
           <Button onClick={() => handleCancel(appointment.id)} colorScheme="red" size="sm">

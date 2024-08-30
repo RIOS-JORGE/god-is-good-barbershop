@@ -1,23 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { Box, VStack, Heading, Text, Button, SimpleGrid, useToast } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  VStack,
+  Heading,
+  Text,
+  Button,
+  SimpleGrid,
+  useToast,
+} from "@chakra-ui/react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import es from 'date-fns/locale/es';
-import { format } from 'date-fns';
-import { addAppointment } from '../firebase/firestore';
-import { auth } from '../firebase';
+import es from "date-fns/locale/es";
+import { format } from "date-fns";
+import { addAppointment } from "../firebase/firestore";
+import { auth } from "../firebase";
 
-registerLocale('es', es);
+registerLocale("es", es);
 
 const horariosDisponibles = {
-  manana: ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30'],
-  tarde: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'],
+  manana: [
+    "08:00",
+    "08:30",
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+  ],
+  tarde: [
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+  ],
 };
 
 export default function AppointmentForm() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
-  const [service, setService] = useState('');
+  const [service, setService] = useState("");
   const toast = useToast();
 
   const handleDateChange = (date) => {
@@ -33,14 +59,19 @@ export default function AppointmentForm() {
     e.preventDefault();
     if (auth.currentUser && selectedTime && service) {
       const appointmentDate = new Date(selectedDate);
-      const [hours, minutes] = selectedTime.split(':');
+      const [hours, minutes] = selectedTime.split(":");
       appointmentDate.setHours(parseInt(hours), parseInt(minutes));
 
       try {
-        await addAppointment(auth.currentUser.uid, appointmentDate, service);
+        await addAppointment(
+          auth.currentUser.uid,
+          appointmentDate,
+          service,
+          auth.currentUser.displayName
+        );
         setSelectedDate(new Date());
         setSelectedTime(null);
-        setService('');
+        setService("");
         toast({
           title: "Turno reservado",
           description: "Tu turno ha sido reservado con éxito.",
@@ -52,7 +83,8 @@ export default function AppointmentForm() {
         console.error("Error al reservar el turno:", error);
         toast({
           title: "Error",
-          description: "No se pudo reservar el turno. Por favor, intenta de nuevo.",
+          description:
+            "No se pudo reservar el turno. Por favor, intenta de nuevo.",
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -107,10 +139,30 @@ export default function AppointmentForm() {
               prevMonthButtonDisabled,
               nextMonthButtonDisabled,
             }) => (
-              <Box display="flex" justifyContent="space-between" alignItems="center" px={2} py={2}>
-                <Button onClick={decreaseMonth} disabled={prevMonthButtonDisabled} size="sm">&lt;</Button>
-                <Text fontWeight="bold">{format(date, 'MMMM yyyy', { locale: es })}</Text>
-                <Button onClick={increaseMonth} disabled={nextMonthButtonDisabled} size="sm">&gt;</Button>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                px={2}
+                py={2}
+              >
+                <Button
+                  onClick={decreaseMonth}
+                  disabled={prevMonthButtonDisabled}
+                  size="sm"
+                >
+                  &lt;
+                </Button>
+                <Text fontWeight="bold">
+                  {format(date, "MMMM yyyy", { locale: es })}
+                </Text>
+                <Button
+                  onClick={increaseMonth}
+                  disabled={nextMonthButtonDisabled}
+                  size="sm"
+                >
+                  &gt;
+                </Button>
               </Box>
             )}
           />
@@ -119,7 +171,7 @@ export default function AppointmentForm() {
         <Box>
           <Text mb={4}>Turno mañana:</Text>
           <SimpleGrid columns={2} spacing={4}>
-            {horariosDisponibles.manana.map(time => (
+            {horariosDisponibles.manana.map((time) => (
               <TimeButton key={time} time={time} />
             ))}
           </SimpleGrid>
@@ -128,7 +180,7 @@ export default function AppointmentForm() {
         <Box>
           <Text mb={4}>Turno tarde:</Text>
           <SimpleGrid columns={2} spacing={4}>
-            {horariosDisponibles.tarde.map(time => (
+            {horariosDisponibles.tarde.map((time) => (
               <TimeButton key={time} time={time} />
             ))}
           </SimpleGrid>
@@ -138,23 +190,23 @@ export default function AppointmentForm() {
           <Text mb={2}>Servicio:</Text>
           <SimpleGrid columns={3} spacing={4}>
             <Button
-              onClick={() => setService('corte')}
-              colorScheme={service === 'corte' ? "blue" : "gray"}
-              variant={service === 'corte' ? "solid" : "outline"}
+              onClick={() => setService("corte")}
+              colorScheme={service === "corte" ? "blue" : "gray"}
+              variant={service === "corte" ? "solid" : "outline"}
             >
               Corte de pelo
             </Button>
             <Button
-              onClick={() => setService('barba')}
-              colorScheme={service === 'barba' ? "blue" : "gray"}
-              variant={service === 'barba' ? "solid" : "outline"}
+              onClick={() => setService("barba")}
+              colorScheme={service === "barba" ? "blue" : "gray"}
+              variant={service === "barba" ? "solid" : "outline"}
             >
               Arreglo de barba
             </Button>
             <Button
-              onClick={() => setService('completo')}
-              colorScheme={service === 'completo' ? "blue" : "gray"}
-              variant={service === 'completo' ? "solid" : "outline"}
+              onClick={() => setService("completo")}
+              colorScheme={service === "completo" ? "blue" : "gray"}
+              variant={service === "completo" ? "solid" : "outline"}
             >
               Corte y barba
             </Button>

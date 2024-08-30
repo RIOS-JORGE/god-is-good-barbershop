@@ -14,8 +14,8 @@ export default function Home() {
 
   return (
     <VStack spacing={8} align="center" justify="center" padding={8}>
-      <Heading>God is Good Barbershop</Heading>
       <Text>Bienvenido, {auth.currentUser?.displayName}</Text>
+      <Heading className="god">God is Good Barbershop</Heading>
       <Button onClick={signOut} colorScheme="red">Cerrar sesión</Button>
       
       {isAdmin ? (

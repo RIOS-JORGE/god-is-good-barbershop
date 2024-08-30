@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from '../firebase';
+import { auth } from "../firebase";
 import { Button, VStack, Heading, Text } from "@chakra-ui/react";
 
 export default function Login() {
@@ -10,15 +10,16 @@ export default function Login() {
       .then((result) => {
         // El usuario ha iniciado sesión correctamente
         console.log(result.user);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         // Manejar errores aquí
         console.error(error);
       });
-  }
+  };
 
   return (
     <VStack spacing={4} align="center" justify="center" height="100vh">
-      <Heading>Bienvenido a God is Good Barbershop</Heading>
+      <Heading className="god">Bienvenido a God is Good Barbershop</Heading>
       <Text>Inicia sesión para solicitar un turno</Text>
       <Button onClick={signInWithGoogle} colorScheme="blue">
         Iniciar sesión con Google
